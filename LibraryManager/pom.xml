@@ -26,5 +26,10 @@
             <artifactId>commons-codec</artifactId>
             <version>1.16.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.3.232</version>
+        </dependency>
     </dependencies>
 </project>
