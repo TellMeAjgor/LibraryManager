@@ -2,11 +2,11 @@ package pl.libraryManager.service.implementation;
 
 import pl.libraryManager.exception.ValidationException;
 import pl.libraryManager.model.Book;
+import pl.libraryManager.model.BookStatus;
 import pl.libraryManager.repository.IBookRepository;
 import pl.libraryManager.service.IBookService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BookService implements IBookService {
     private final IBookRepository bookRepository;
@@ -23,27 +23,24 @@ public class BookService implements IBookService {
     @Override
     public List<Book> search(String query) {
         if (query == null || query.trim().isEmpty()) return List.of();
-        String lowerQuery = query.toLowerCase();
-        return bookRepository.findAll().stream()
-                .filter(b -> b.getTitle().toLowerCase().contains(lowerQuery) ||
-                        b.getAuthor().toLowerCase().contains(lowerQuery))
-                .collect(Collectors.toList());
+        return bookRepository.search(query);
     }
 
     @Override
-    public void addBook(String title, String author) {
+    public void addBook(String title, String author, Long categoryId) {
         validateBookData(title, author);
-        bookRepository.save(new Book(null, title, author));
+        bookRepository.save(new Book(null, title, author, null, null, BookStatus.AVAILABLE, categoryId));
     }
 
     @Override
-    public void updateBook(Long id, String newTitle, String newAuthor) {
+    public void updateBook(Long id, String newTitle, String newAuthor, Long newCategoryId) {
         validateBookData(newTitle, newAuthor);
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ValidationException("Nie znaleziono książki o ID: " + id));
         book.setTitle(newTitle);
         book.setAuthor(newAuthor);
-        bookRepository.save(book);
+        book.setCategoryId(newCategoryId);
+        bookRepository.update(book);
     }
 
     @Override
