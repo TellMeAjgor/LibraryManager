@@ -80,23 +80,24 @@ public class LibraryController {
         System.out.println("0. Wyloguj");
         System.out.print("> ");
 
-        String cmd = scanner.nextLine();
+        MenuCommand cmd = MenuCommand.fromCode(scanner.nextLine());
+
         try {
             switch (cmd) {
-                case "1": bookService.getAllBooks().forEach(System.out::println); break;
-                case "2":
+                case LIST_BOOKS: bookService.getAllBooks().forEach(System.out::println); break;
+                case SEARCH_BOOKS:
                     System.out.print("Szukaj: ");
                     bookService.search(scanner.nextLine()).forEach(System.out::println);
                     break;
-                case "3": borrowAction(user); break;
-                case "4": returnAction(user); break;
-                case "5": loanService.getUserLoans(user.getId()).forEach(System.out::println); break;
-                case "6": categoryService.getAllCategories().forEach(System.out::println); break;
-                case "7": addBookAction(user); break;
-                case "8": editBookAction(user); break;
-                case "9": deleteBookAction(user); break;
-                case "10": addCategoryAction(user); break;
-                case "0":
+                case BORROW_BOOK: borrowAction(user); break;
+                case RETURN_BOOK: returnAction(user); break;
+                case MY_LOANS: loanService.getUserLoans(user.getId()).forEach(System.out::println); break;
+                case CATEGORIES: categoryService.getAllCategories().forEach(System.out::println); break;
+                case ADD_BOOK: addBookAction(user); break;
+                case EDIT_BOOK: editBookAction(user); break;
+                case DELETE_BOOK: deleteBookAction(user); break;
+                case ADD_CATEGORY: addCategoryAction(user); break;
+                case LOGOUT:
                     authService.logout();
                     System.out.println(">>> Wylogowano.");
                     break;
